@@ -1,6 +1,15 @@
 import os
+import stat
 
 CRON_FILE = "/etc/crontab"
+
+def is_writable(path):
+    try:
+      st = os.stat(path)
+      return bool(st.st_mode and stat.S_IWOTH)
+    except :
+        return False
+
 
 def scan_cron_jobs():
     findings = []
@@ -16,15 +25,22 @@ def scan_cron_jobs():
             parts = line.split()
             if len(parts) <7:
                 continue
-
             user = parts[5]
             command = parts[6]
-            if user == "root":
-                findings.append({
-                    "type":"cron",
-                    "user":user,
-                    "command":command
-                })
+            if user != "root":
+                continue
+            
+            finding = {
+                "type":"cron",
+                "user":user,
+                "command":command,
+                "dir_writable": False,
+                "file_writable":False
+            }
+            if os.path.exists(command):
+                finding["file_writable"] = is_writable(command)
+                finding["dir_writable"] = is_writable(os.path.dirname(command))
+            findings.append(finding)
     
     return findings
 

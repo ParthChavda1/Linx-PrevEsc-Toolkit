@@ -1,0 +1,17 @@
+{
+  "4.4": {
+    "risk": "HIGH",
+    "cves": ["CVE-2016-5195 (Dirty COW)"],
+    "note": "End-of-life kernel with known privilege escalation vulnerabilities"
+  },
+  "4.8": {
+    "risk": "HIGH",
+    "cves": ["CVE-2017-1000112"],
+    "note": "Multiple local privilege escalation vulnerabilities"
+  },
+  "5.4": {
+    "risk": "MEDIUM",
+    "cves": [],
+    "note": "Older LTS kernel, security updates required"
+  }
+}

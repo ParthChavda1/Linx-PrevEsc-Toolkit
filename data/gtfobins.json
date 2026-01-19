@@ -6,5 +6,4 @@
   "bash": "Can preserve privileges with -p flag",
   "python": "Can spawn shell if SUID",
   "fakefind.sh": "Test SUID binary for validation"
-
 }

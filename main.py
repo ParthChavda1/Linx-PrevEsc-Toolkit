@@ -4,6 +4,7 @@ from core.analyzer import cron_analyzer
 from modules.cron_scan import scan_cron_jobs
 from modules.kernel_scan import scan_kernel
 from modules.suid_scan import scan_suid_binaries
+from modules.permission_scan import scan_permissions
 
 def main():
     print("[*] Starting Linux PrivExc Audit Tool \n")
@@ -18,10 +19,15 @@ def main():
     for item in suid_findings:
         if item["potentially_exploited"]:
             print(f"[High] {item['path']} -> {item['reason']}")
-        else:
-            print(f"[INFO] {item["path"]}")
+    #     else:
+    #         print(f"[INFO] {item["path"]}")
     
 
+    permission_findings = scan_permissions()
+    print("\n[+] Permission Scan Results")
+    for item in permission_findings:
+        print(f"    [{item["severity"]}] : {item["path"]}")
+        print(f"    {item["context"]} -> {item["impact"]}")
     # cron_findings = scan_cron_jobs()
     # print("\n[+] Cron Jobs Running as Root:")
     # for job in cron_findings:

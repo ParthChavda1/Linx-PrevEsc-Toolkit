@@ -1,50 +1,45 @@
 from core.system_info import get_sytem_info
-from core.analyzer import cron_analyzer
 
-from modules.cron_scan import scan_cron_jobs
+from modules.cron_scan import scan_cron
 from modules.kernel_scan import scan_kernel
-from modules.suid_scan import scan_suid_binaries
+from modules.suid_scan import scan_suid_sgid_binaries
 from modules.permission_scan import scan_permissions
+from modules.service_scan import scan_services
+from report_generation.reprot_generator import generate_report,generate_txt_report
 
 def main():
-    print("[*] Starting Linux PrivExc Audit Tool \n")
+    print("[*] Starting Linux PrivExc Audit Tool")
+    print("="*60+"\n")
 
+    print("[+] Getting System Information")
     system_info = get_sytem_info()
-    print("[+] System Information:")
-    for k ,v in system_info.items():
-        print(f"    {k}: {v}")
 
-    suid_findings = scan_suid_binaries()
     print("[+]  SUID Binary Scan")
-    for item in suid_findings:
-        if item["potentially_exploited"]:
-            print(f"[High] {item['path']} -> {item['reason']}")
-    #     else:
-    #         print(f"[INFO] {item["path"]}")
-    
-
+    suid_findings = scan_suid_sgid_binaries()
+    print("SUID Binary Scan Complete")
+  
+    print("[+] Permission Scan")
     permission_findings = scan_permissions()
-    print("\n[+] Permission Scan Results")
-    for item in permission_findings:
-        print(f"    [{item["severity"]}] : {item["path"]}")
-        print(f"    {item["context"]} -> {item["impact"]}")
-    # cron_findings = scan_cron_jobs()
-    # print("\n[+] Cron Jobs Running as Root:")
-    # for job in cron_findings:
-    #     print(f"    {job['command']}")
+    print("Permission Scan Complete")
     
-    # analysis_result = cron_analyzer(cron_findings)
-    # print("\n[+] Cron Analysis result")
-    # for item in analysis_result:
-    #     print(f"    [{item['severity']}] {item['command']} → {item['reason']}")
+    print("[+] Service Scan")
+    service_findings = scan_services()
+    print("Service Scan Complete")
 
+    print("[+] Cron Scan")
+    cron_findings = scan_cron()
+    print("Cron Scan Complete")
 
-    # kernel_finding = scan_kernel()
-    # print("\n[+] Kernel Analysis")
-    # print(kernel_finding)
+    print("[+] Kernel Analysis")
+    kernel_finding = scan_kernel()
+    print("Kernel Analysis Complete\n")
 
-
-
+    print("Generating Report....")
+    json_file = generate_report(system_info,suid_findings,permission_findings,service_findings,cron_findings,kernel_finding)
+    report_file = generate_txt_report(json_file)
+    print("Report Generation Complete")
+    print(f"\n\nReport.json:{json_file}\n Report.txt: {report_file}")
 
 if __name__ == "__main__":
     main()
+

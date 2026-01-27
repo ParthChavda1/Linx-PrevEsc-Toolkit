@@ -14,10 +14,11 @@ def cron_analyzer(findings):
             "command" : item['command'],
             "user": item['user'],
             "severity":severity,
-            "reason": reason
+            "reason": item["issue"]
         }
         analysis_result.append(result)
 
     
     return analysis_result
+
 

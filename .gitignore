@@ -1,5 +1,8 @@
-__pychache__/
+__pycache__/
 *.pyc
 
 venv/
+
+reports/report.txt
+reports/report.json
 

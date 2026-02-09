@@ -189,6 +189,7 @@ def generate_txt_report(json_file):
     # =========================
     lines.append("DETAILED FINDINGS")
     lines.append("=" * 55)
+    lines.append("\n")
 
     for finding in data.get("findings", []):
         lines.append(f"Finding ID    : {finding.get('id')}")
@@ -203,6 +204,7 @@ def generate_txt_report(json_file):
         lines.append("Suggested Mitigation:")
         lines.append(f"  {finding.get('suggested_mitigation')}")
         lines.append("-" * 55)
+        lines.append("\n\n")
 
 
     with open(OUTPUT_TXT, "w") as f:

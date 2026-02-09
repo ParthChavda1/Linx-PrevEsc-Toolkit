@@ -1,5 +1,4 @@
-from core.system_info import get_sytem_info
-
+from modules.system_info import get_sytem_info
 from modules.cron_scan import scan_cron
 from modules.kernel_scan import scan_kernel
 from modules.suid_scan import scan_suid_sgid_binaries
